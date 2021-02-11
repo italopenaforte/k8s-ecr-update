@@ -1,0 +1,31 @@
+name: Generate K8S-ECR-UPDATE
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build, tag, and push image to Amazon ECR
+        run: |
+          docker build -t 693767675573.dkr.ecr.us-east-1.amazonaws.com/solidos:ecr-update --file ./Dockerfile .
+          docker push 693767675573.dkr.ecr.us-east-1.amazonaws.com/solidos:ecr-update
