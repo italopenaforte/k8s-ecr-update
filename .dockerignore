@@ -1,0 +1,6 @@
+.venv
+.env
+.idea
+.vscode
+k8s-yml
+README.md
